@@ -18,7 +18,7 @@ export default class RecipeInfoScreen extends React.Component {
   }
 
   componentWillMount() {
-    const url = global.apiUrl + 'r=' + encodeURIComponent(this.props.navigation.state.params.uri) + '&app_id=' + global.appId + '&app_key=' + global.appKey;
+    const url = global.apiUrl + '?r=' + encodeURIComponent(this.props.navigation.state.params.uri) + '&app_id=' + global.appId + '&app_key=' + global.appKey;
 
     fetch(url)
       .then(response => response.json())
@@ -47,7 +47,7 @@ export default class RecipeInfoScreen extends React.Component {
 
         <View style={styles.fullHeightContainer}>
           { this.state.loaded ?
-            <List style={[styles.list, {flex: 1}]}>
+            <List containerStyle={styles.list}>
               <Tile
                 imageSrc={{uri: this.state.data[0].image}}
                 title={this.state.data[0].label}

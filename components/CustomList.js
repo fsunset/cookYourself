@@ -50,7 +50,7 @@ export default class CustomList extends React.Component {
 
   render() {
     return(
-      <List style={styles.list}>
+      <List containerStyle={styles.list}>
         { this.state.loaded ?
           <FlatList
             data={this.state.data}
@@ -62,7 +62,7 @@ export default class CustomList extends React.Component {
               >
                 <View>
                   <Card
-                    style={itemsUserStyles.card}
+                    containerStyle={itemsUserStyles.card}
                     title={item.recipe.label}
                     titleStyle={itemsUserStyles.title}
                     image={{uri: item.recipe.image}}

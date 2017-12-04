@@ -90,7 +90,10 @@ module.exports = StyleSheet.create({
   },
   list: {
     width: '100%',
-    flex: 1
+    flex: 1,
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    marginTop: 0
   },
   spinnerContainer: {
     flex: 1,

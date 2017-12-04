@@ -7,6 +7,8 @@ import React, {
 module.exports = StyleSheet.create({
   card: {
     backgroundColor: 'transparent',
+    borderWidth: 0,
+    margin: 0,
     paddingBottom: 20
   },
   title: {
