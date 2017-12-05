@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import { Text, View, ImageBackground, StatusBar, ActivityIndicator, FlatList, TouchableHighlight } from 'react-native';
+import { Text, View, ImageBackground, StatusBar, ActivityIndicator, FlatList, TouchableHighlight, Linking } from 'react-native';
 import { Tile, List, ListItem } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -35,6 +35,11 @@ export default class RecipeInfoScreen extends React.Component {
           loaded: true
         });
       });
+  }
+
+  goToLink(recipeUrl) {
+    Linking.openURL(recipeUrl)
+      .catch(err => console.error(err));
   }
 
   render() {
@@ -86,7 +91,7 @@ export default class RecipeInfoScreen extends React.Component {
               />
 
               <TouchableHighlight
-                // onPress={() => this._linkPressed('http://www.google.com')}
+                onPress={() => this.goToLink(this.state.data[0].url)}
                 underlayColor='#ea4e3c'
                 activeOpacity={1}
                 style={[styles.primaryButton, {marginTop: 5}]}
