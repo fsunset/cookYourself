@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import styles from '../assets/styles/globals';
 import recipeStyles from '../assets/styles/recipe';
+import itemsUserStyles from '../assets/styles/itemsUser.js';
 
 export default class RecipeInfoScreen extends React.Component {
   constructor(props) {
@@ -18,28 +19,24 @@ export default class RecipeInfoScreen extends React.Component {
   }
 
   componentWillMount() {
-    const url = global.apiUrl + '?r=' + encodeURIComponent(this.props.navigation.state.params.uri) + '&app_id=' + global.appId + '&app_key=' + global.appKey;
-
-    fetch(url)
+    const url = global.apiUrl + 'recipe/' + this.props.navigation.state.params.recipeId + '?api_key=' + global.apiKey;
+    fetch(url, {
+      method: 'GET',
+      cache: 'default',
+      headers:
+        {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+    })
       .then(response => response.json())
       .then(response => {
         this.setState({
           data: response,
-          error: response.error || null,
           loaded: true
         });
       })
-      .catch(error => {
-        this.setState({
-          error: error,
-          loaded: true
-        });
-      });
-  }
-
-  goToLink(recipeUrl) {
-    Linking.openURL(recipeUrl)
-      .catch(err => console.error(err));
+      .catch(error => console.error(error));
   }
 
   render() {
@@ -54,14 +51,33 @@ export default class RecipeInfoScreen extends React.Component {
           { this.state.loaded ?
             <List containerStyle={styles.list}>
               <Tile
-                imageSrc={{uri: this.state.data[0].image}}
-                title={this.state.data[0].label}
+                imageSrc={{uri: this.state.data.ImageUrl}}
+                title={this.state.data.Title}
                 titleStyle={recipeStyles.recipeTitle}
-                caption={this.state.data[0].yield + ' serves'}
+                caption={ this.state.data.YieldNumber + ' serves'}
                 captionStyle={recipeStyles.recipeCaption}
                 featured
                 activeOpacity={1}
               />
+
+              {this.state.data.Cuisine != null &&
+                <View style={[itemsUserStyles.recipeTagsContainer]}>
+                  <Text
+                    style={itemsUserStyles.recipeTags}
+                  >
+                    {this.state.data.Cuisine + ' Cuisine'}
+                  </Text>
+                </View>
+              }
+              {this.state.data.TotalMinutes > 0 &&
+              <View style={[itemsUserStyles.recipeTagsContainer]}>
+                <Text
+                  style={itemsUserStyles.recipeTags}
+                >
+                  {this.state.data.TotalMinutes + ' Minutes'}
+                </Text>
+              </View>
+              }
 
               <View style={recipeStyles.recipeHeaderContainer}>
                 <Text style={[styles.link, styles.linkLarge, recipeStyles.recipeHeader]}>Ingredients</Text>
@@ -73,13 +89,13 @@ export default class RecipeInfoScreen extends React.Component {
               </View>
 
               <FlatList
-                data={this.state.data[0].ingredients}
+                data={this.state.data.Ingredients}
                 renderItem={ ({item}) =>
                   (
                     <ListItem
-                      key={item.weight + Math.random()}
+                      key={item.IngredientID}
                       style={recipeStyles.ingredientRow}
-                      title={item.text}
+                      title={item.Name}
                       titleNumberOfLines={5}
                       titleStyle={recipeStyles.recipeIngredients}
                       hideChevron
@@ -87,17 +103,13 @@ export default class RecipeInfoScreen extends React.Component {
                     />
                   )
                 }
-                keyExtractor={item => item.weight + Math.random()}
+                keyExtractor={item => item.IngredientID}
               />
 
-              <TouchableHighlight
-                onPress={() => this.goToLink(this.state.data[0].url)}
-                underlayColor='#ea4e3c'
-                activeOpacity={1}
-                style={[styles.primaryButton, {marginTop: 5}]}
-              >
-                <Text style={styles.primaryButtonText}>View Full Recipe</Text>
-              </TouchableHighlight>
+              <View style={recipeStyles.recipeHeaderContainer}>
+                <Text style={[styles.link, styles.linkLarge, recipeStyles.recipeHeader]}>Instructions</Text>
+                <Text>{this.state.data.Instructions}</Text>
+              </View>
             </List>
             :
             <View style={styles.spinnerContainer}>

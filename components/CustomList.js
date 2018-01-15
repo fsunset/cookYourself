@@ -26,22 +26,27 @@ export default class CustomList extends React.Component {
       this.setState({
         user: userData,
         data: [],
-        error: null,
         refreshing: false
       });
     });
   }
 
   componentDidMount() {
-    const url = global.apiUrl + '?q=chicken&app_id=' + global.appId + '&app_key=' + global.appKey + '&from=0&to=20';
-    // const url = 'http://api.campbellskitchen.com/brandservice.svc/api/search?ingredient=beef&format=json&app_id=daf820f6&app_key=e3ee4684e1a79ffa2515d8b8286fc6d9&total=20';
+    const url = global.apiUrl + 'recipes?photos=true&rpp=20&pg=1' + '&api_key=' + global.apiKey + '&include_ing=mustard,chicken,beef';
 
-    fetch(url)
+    fetch(url, {
+      method: 'GET',
+      cache: 'default',
+      headers:
+        {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8'
+        }
+    })
       .then(response => response.json())
       .then(response => {
         this.setState({
-          data: response.hits,
-          error: response.error || false,
+          data: response.Results,
           loaded: true
         });
       })
@@ -57,35 +62,44 @@ export default class CustomList extends React.Component {
             renderItem={ ({item}) =>
               <TouchableHighlight
                 onPress={
-                  () => this.props.navigation.navigate('RecipeInfo', {'uri': item.recipe.uri})
+                  () => this.props.navigation.navigate('RecipeInfo', {'recipeId': item.RecipeID})
                 }
               >
                 <View>
                   <Card
                     containerStyle={itemsUserStyles.card}
-                    title={item.recipe.label}
+                    title={item.Title}
                     titleStyle={itemsUserStyles.title}
-                    image={{uri: item.recipe.image}}
+                    image={{uri: item.PhotoUrl}}
                   >
                     <View style={[itemsUserStyles.recipeTagsContainer]}>
-                      {
-                        (item.recipe.dietLabels.concat(item.recipe.healthLabels)).map((tag, i) => {
-                          return (
-                            <Text
-                              key={i}
-                              style={itemsUserStyles.recipeTags}
-                            >
-                              {tag}
-                            </Text>
-                          )
-                        })
-                      }
+                      <Text
+                        style={itemsUserStyles.recipeTags}
+                      >
+                        {item.Category}
+                      </Text>
+                    </View>
+                    <View style={[itemsUserStyles.recipeTagsContainer]}>
+                      <Text
+                        key={item.RecipeID}
+                        style={itemsUserStyles.recipeTags}
+                      >
+                        Review Count: {item.ReviewCount}
+                      </Text>
+                    </View>
+                    <View style={[itemsUserStyles.recipeTagsContainer]}>
+                      <Text
+                        key={item.RecipeID}
+                        style={itemsUserStyles.recipeTags}
+                      >
+                        Star Rating: {item.StarRating}
+                      </Text>
                     </View>
                   </Card>
                 </View>
               </TouchableHighlight>
             }
-            keyExtractor={item => item.recipe.uri}
+            keyExtractor={item => item.RecipeID}
           />
           :
           <View style={styles.spinnerContainer}>
