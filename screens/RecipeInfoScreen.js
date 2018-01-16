@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import styles from '../assets/styles/globals';
 import recipeStyles from '../assets/styles/recipe';
-import itemsUserStyles from '../assets/styles/itemsUser.js';
+import itemsUserStyles from '../assets/styles/itemsUser';
 
 export default class RecipeInfoScreen extends React.Component {
   constructor(props) {
@@ -51,7 +51,7 @@ export default class RecipeInfoScreen extends React.Component {
           { this.state.loaded ?
             <List containerStyle={styles.list}>
               <Tile
-                imageSrc={{uri: this.state.data.ImageUrl}}
+                imageSrc={{uri: this.state.data.PhotoUrl}}
                 title={this.state.data.Title}
                 titleStyle={recipeStyles.recipeTitle}
                 caption={ this.state.data.YieldNumber + ' serves'}
@@ -60,24 +60,22 @@ export default class RecipeInfoScreen extends React.Component {
                 activeOpacity={1}
               />
 
-              {this.state.data.Cuisine != null &&
-                <View style={[itemsUserStyles.recipeTagsContainer]}>
+              <View style={[itemsUserStyles.recipeTagsContainer]}>
+                {this.state.data.Cuisine != null &&
                   <Text
                     style={itemsUserStyles.recipeTags}
                   >
                     {this.state.data.Cuisine + ' Cuisine'}
                   </Text>
-                </View>
-              }
-              {this.state.data.TotalMinutes > 0 &&
-              <View style={[itemsUserStyles.recipeTagsContainer]}>
-                <Text
-                  style={itemsUserStyles.recipeTags}
-                >
-                  {this.state.data.TotalMinutes + ' Minutes'}
-                </Text>
+                }
+                {this.state.data.TotalMinutes > 0 &&
+                  <Text
+                    style={itemsUserStyles.recipeTags}
+                  >
+                    {this.state.data.TotalMinutes + ' Minutes'}
+                  </Text>
+                }
               </View>
-              }
 
               <View style={recipeStyles.recipeHeaderContainer}>
                 <Text style={[styles.link, styles.linkLarge, recipeStyles.recipeHeader]}>Ingredients</Text>
@@ -106,10 +104,6 @@ export default class RecipeInfoScreen extends React.Component {
                 keyExtractor={item => item.IngredientID}
               />
 
-              <View style={recipeStyles.recipeHeaderContainer}>
-                <Text style={[styles.link, styles.linkLarge, recipeStyles.recipeHeader]}>Instructions</Text>
-                <Text>{this.state.data.Instructions}</Text>
-              </View>
             </List>
             :
             <View style={styles.spinnerContainer}>

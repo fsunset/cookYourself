@@ -6,7 +6,7 @@ import { List, ListItem, Card, PricingCard } from 'react-native-elements'
 import { NavigationActions } from 'react-navigation';
 
 import styles from '../assets/styles/globals.js';
-import itemsUserStyles from '../assets/styles/itemsUser.js';
+import itemsUserStyles from '../assets/styles/itemsUser';
 
 
 export default class CustomList extends React.Component {
@@ -74,25 +74,22 @@ export default class CustomList extends React.Component {
                   >
                     <View style={[itemsUserStyles.recipeTagsContainer]}>
                       <Text
+                        key={item.RecipeID + Math.random()}
                         style={itemsUserStyles.recipeTags}
                       >
                         {item.Category}
                       </Text>
-                    </View>
-                    <View style={[itemsUserStyles.recipeTagsContainer]}>
                       <Text
-                        key={item.RecipeID}
+                        key={item.RecipeID + Math.random()}
                         style={itemsUserStyles.recipeTags}
                       >
-                        Review Count: {item.ReviewCount}
+                        Review Count: {item.ReviewCount > 0 ? item.ReviewCount : '1'}
                       </Text>
-                    </View>
-                    <View style={[itemsUserStyles.recipeTagsContainer]}>
                       <Text
-                        key={item.RecipeID}
+                        key={item.RecipeID + Math.random()}
                         style={itemsUserStyles.recipeTags}
                       >
-                        Star Rating: {item.StarRating}
+                        Star Rating: {item.StarRating > 0 ? Math.floor(item.StarRating) : '1'}
                       </Text>
                     </View>
                   </Card>

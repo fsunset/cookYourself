@@ -27,7 +27,7 @@ module.exports = StyleSheet.create({
   },
   ingredientRow: {
     borderBottomWidth: 0,
-    paddingBottom: 10,
+    paddingBottom: 7,
     paddingRight: 10,
     backgroundColor: 'transparent'
   },
